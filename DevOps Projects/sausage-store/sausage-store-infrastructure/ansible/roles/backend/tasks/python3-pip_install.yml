@@ -1,0 +1,8 @@
+---
+- name: Install {{  python_pip_version  }} & {{  python_lxml_version  }}
+  apt:
+    name: "{{  python_pip_version  }}"
+    name: "{{  python_lxml_version  }}"
+    state: present
+    update_cache: yes
+    

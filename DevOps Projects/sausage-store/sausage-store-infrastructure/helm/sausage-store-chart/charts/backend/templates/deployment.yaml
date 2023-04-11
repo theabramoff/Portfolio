@@ -1,0 +1,64 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: "{{ .Chart.Name }}"
+  labels:
+    app: "{{ .Chart.Name }}"
+    app.kubernetes.io/name: sausage-backend
+    app.kubernetes.io/instance: "{{ .Release.Name }}"
+    app.kubernetes.io/version: "{{ .Chart.AppVersion }}"
+    app.kubernetes.io/managed-by: "{{ .Release.Service }}"
+    helm.sh/chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
+    app.kubernetes.io/component: backend
+    app.kubernetes.io/part-of: sausage-store
+    env: "{{ .Values.environment }}"
+spec:
+  replicas: {{ .Values.replicas }} 
+  strategy:
+    type: {{ .Values.strategy.type }}
+    rollingUpdate:
+      maxSurge: {{ .Values.strategy.maxSurge }}
+      maxUnavailable: {{ .Values.strategy.maxUnavailable }}
+  revisionHistoryLimit: {{ .Values.strategy.revisionHistoryLimit }}
+  selector:
+    matchLabels:
+      app: "{{ .Chart.Name }}"
+  template:
+    metadata:
+      labels:
+        app: "{{ .Chart.Name }}"
+    spec:
+      containers:
+        - image: {{ .Values.image }}
+          name: "{{ .Chart.Name }}"
+          imagePullPolicy: {{ .Values.imagePullPolicy }}
+          env:
+            {{- range $env := .Values.env }}
+            - name: {{ $env.name }}
+              valueFrom:
+                secretKeyRef:
+                  name: {{ $env.secret }}
+                  key: {{ $env.key }}
+            {{- end }}
+          ports:
+            - name: {{ .Values.ports.name }}
+              containerPort: {{ .Values.ports.containerPort }}
+          livenessProbe:
+            # health check performs HTTP GET       
+            httpGet:
+              # path for HTTP-request          
+              path: {{ .Values.livenessProbe.path }}
+              # port for health checking        
+              port: {{ .Values.livenessProbe.port }}
+            # wait 15 sec till backend strarted          
+            initialDelaySeconds: {{ .Values.livenessProbe.initialDelay }}
+            # check every 30 sec
+            periodSeconds: {{ .Values.livenessProbe.period }}
+            # time for checking (default 1)
+            timeoutSeconds: {{ .Values.livenessProbe.timeout }}
+            # how much try to check (default 1)
+            failureThreshold: {{ .Values.livenessProbe.failureThreshold }}
+      # Download images from GitLab Registry  
+      imagePullSecrets:
+        - name: {{ .Values.global.DockerSecret.secretName }}

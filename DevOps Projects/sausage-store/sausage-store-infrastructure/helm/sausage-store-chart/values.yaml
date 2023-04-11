@@ -1,0 +1,201 @@
+###############################
+# frontend deployment
+###############################
+
+frontend:
+  name: frontend
+  environment: dev
+  replicas: 2
+  strategy: RollingUpdate
+  rollingUpdate:
+    maxSurge: 1
+    maxUnavailable: 0
+  revisionHistoryLimit: 15
+  containers:
+    name: frontend
+    image: gitlab.praktikum-services.ru:5050/std-010-057/sausage-store/sausage-frontend-nginx:latest
+    mount: nginx-config
+    mountPath: /etc/nginx/nginx.conf
+    subPath: nginx.conf
+  values:
+    name: nginx-config
+  affinity:
+    key: app
+    operator: In
+    values: frontend
+
+###############################
+# frontend Service
+###############################
+
+  serviceName: frontend
+  appLabel: frontend
+  serviceType: ClusterIP
+  servicePort: 8080
+
+###############################
+# frontend ingress
+###############################
+
+  ingress:
+    name: frontend
+    ingressClassName: "nginx"
+    fqdn: "std-010-057.k8s.praktikum-services.tech"
+    path: /
+    pathType: Prefix
+    service:
+      name: frontend
+      port: 8080
+
+###############################
+# backend-report deployment
+###############################
+
+backend-report:
+  name: report
+  environment: dev
+  replicas: 1
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 0
+  revisionHistoryLimit: 15
+  image: gitlab.praktikum-services.ru:5050/std-010-057/sausage-store/sausage-backend-report:latest
+  imagePullPolicy: IfNotPresent
+  resources:
+    requests:
+      memory: "512Mi"
+      cpu: 0.1
+    limits:
+      memory: "1025Mi"
+      cpu: 0.2
+  env:
+    name: DB
+    valueFrom:
+      secretKeyRef:
+        name: mongo-db
+        key: STRING
+  ports:
+    name: backend-report
+    containerPort: 8080
+  imagePullSecrets:
+    name: docker-config-secret
+
+###############################
+# backend-report HPA
+###############################
+
+  HPA:
+    name: backend-report-hpa
+    labels: backend-report
+    minReplicas: 1
+    maxReplicas: 5
+    metrics:
+      type: Resource
+      resource:
+        name: cpu
+        target:
+          type: Utilization
+          averageUtilization: 75
+
+###############################
+# backend-report secrets
+###############################
+
+  BackendReportSecret:
+    secretName: mongo-db
+    STRING: bW9uZ29kYjovL3RoZWFicmFtb2ZmOlRlc3R1c3IxMjM0QHJjMWItaTUwMWs5cnV6dWJvdmIyeC5tZGIueWFuZGV4Y2xvdWQubmV0OjI3MDE4L3RoZWFicmFtb2ZmP3Rscz10cnVlJnRsc0FsbG93SW52YWxpZENlcnRpZmljYXRlcz10cnVl
+
+###############################
+# backend deployment
+###############################
+
+backend:
+  name: backend
+  environment: dev
+  replicas: 1
+  strategy:
+    type: RollingUpdate
+    maxSurge: 20%
+    maxUnavailable: 1
+    revisionHistoryLimit: 15
+  image: gitlab.praktikum-services.ru:5050/std-010-057/sausage-store/sausage-backend:latest
+  imagePullPolicy: IfNotPresent
+  env:
+    - name: SPRING_DATASOURCE_PASSWORD
+      secret: spring-password
+      key: SPRING_DATASOURCE_PASSWORD
+    - name: SPRING_DATASOURCE_URL
+      secret: spring-url
+      key: SPRING_DATASOURCE_URL
+    - name: SPRING_DATASOURCE_USERNAME
+      secret: spring-username
+      key: SPRING_DATASOURCE_USERNAME
+    - name: SPRING_DATA_MONGODB_URI
+      secret: spring-mongo-uri
+      key: SPRING_DATA_MONGODB_URI
+  ports:
+    name: backend-report
+    containerPort: 8080
+  livenessProbe:
+    path: /actuator/health
+    port: 8080
+    initialDelaySeconds: 15
+    periodSeconds: 30
+    timeoutSeconds: 2
+    failureThreshold: 6
+  imagePullSecrets:
+    name: docker-config-secret
+
+###############################
+# backend Service
+###############################
+
+  serviceName: backend
+  appLabel: backend
+  serviceType: ClusterIP
+  servicePort: 8080
+
+###############################
+# backend-report VPA
+###############################
+
+  vpa:
+    name: backend-vpa
+    labels: backend
+    containerPolicies:
+        containerName: backend
+        controlledResources: ["cpu", "memory"]
+        mode: "Auto"
+        controlledValues: "RequestsAndLimits"
+
+###############################
+# backend secrets
+###############################
+  
+  SpringPassword:
+      secretName: spring-password
+      SPRING_DATASOURCE_PASSWORD: VGVzdHVzcjEyMzQ=
+
+  SpringURL:
+      secretName: spring-url
+      SPRING_DATASOURCE_URL: amRiYzpwb3N0Z3Jlc3FsOi8vcmMxYi01eTlibjVzZ2VzZXdodDFsLm1kYi55YW5kZXhjbG91ZC5uZXQ6NjQzMi90aGVhYnJhbW9mZg==
+
+  SpringUsername:
+      secretName: spring-username
+      SPRING_DATASOURCE_USERNAME: dGhlYWJyYW1vZmY=
+
+  SpringMongoURI:
+      secretName: spring-mongo-uri
+      SPRING_DATA_MONGODB_URI: bW9uZ29kYjovL3RoZWFicmFtb2ZmOlRlc3R1c3IxMjM0QHJjMWItaTUwMWs5cnV6dWJvdmIyeC5tZGIueWFuZGV4Y2xvdWQubmV0OjI3MDE3L3RoZWFicmFtb2ZmP3Rscz10cnVl
+
+###############################
+# Global secrets
+###############################
+
+global:
+  DockerSecret:
+      secretName: docker-config-secret
+      dockerconfigjson: >-
+          ewoJImF1dGhzIjogewoJCSJnaXRsYWIucHJha3Rpa3VtLXNlcnZpY2VzLnJ1OjUwNTAiOiB7CgkJCSJhdXRoIjogIlpYSmhhMmh0WlhSNmVXRnViM1k2TlZrNWNESnlSM05RUVcxSFVIST0iCgkJfQoJfQp9

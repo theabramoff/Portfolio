@@ -1,0 +1,10 @@
+
+node_version: 16.18.1
+
+frontend_user: frontend
+
+frontend_path_default: /var/www-data/
+
+frontend_work_directory: /var/www-data/frontend
+
+frontend_version: 1.0.297767

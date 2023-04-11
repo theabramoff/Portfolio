@@ -1,0 +1,12 @@
+[Unit]
+Description=Sausage-store-backend
+
+[Service]
+User=jarservice
+StandardOutput=/opt/log/sausage-store-backend.log
+WorkingDirectory=/opt/sausage-store/backend/lib/
+ExecStart=/usr/lib/jvm/java-16-openjdk-amd64/bin/java -Dmyserver.bindAddr=127.0.0.1 -Dmyserver.bindPort=8080 -jar sausage-store.jar
+SuccessExitStatus=143
+
+[Install]
+WantedBy=multi-user.target

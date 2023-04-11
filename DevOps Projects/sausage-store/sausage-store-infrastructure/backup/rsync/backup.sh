@@ -1,0 +1,1 @@
+rsync -azvh /home/jarservice/sausage-store.jar user-backup@10.129.0.6:/opt/backup/backup_$(date +"%F_%H:%M")/ >> /var/log/sausage-store.log

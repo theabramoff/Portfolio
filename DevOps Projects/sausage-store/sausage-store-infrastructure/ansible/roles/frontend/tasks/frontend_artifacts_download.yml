@@ -1,0 +1,24 @@
+---
+- name: download artifacts
+  ansible.builtin.get_url:
+    url: https://nexus.praktikum-services.ru/repository/sausage-store-Abramov-frontend/sausage-store-front/sausage-store/{{ frontend_version }}/sausage-store-{{ frontend_version }}.tar.gz
+    dest: "{{ frontend_path_default }}"
+    username: "{{ nexus_user }}"
+    password: "{{ nexus_secret }}"
+    mode: "755"
+    owner: "{{ frontend_user }}"
+    group: "sudo"
+
+- name: ARTIFACTS - frontend downloading
+  ansible.builtin.unarchive:
+    src: "{{ frontend_path_default }}sausage-store-{{ frontend_version }}.tar.gz"
+    dest: "{{ frontend_path_default }}"
+    remote_src: yes
+    mode: "755"
+    owner: "{{ frontend_user }}"
+    group: "sudo"
+
+- name: Remove file (delete file)
+  ansible.builtin.file:
+    path: "{{ frontend_path_default }}sausage-store-{{ frontend_version }}.tar.gz"
+    state: absent

@@ -1,0 +1,16 @@
+
+/opt/log/*.log {
+  rotate 3
+  hourly
+  compress
+  missingok
+  size 10M
+  dateext
+  dateformat -%Y%m%d-%s
+  create
+  copytruncate
+  postrotate
+       find /opt/log/ -name "*.log.*.gz" -type f -mmin +240 -delete
+       date >> /opt/student_rotate.log
+  endscript
+}

@@ -1,0 +1,24 @@
+---
+- name: NPM - install build
+  args:
+    chdir: "{{ frontend_work_directory }}"
+  command: npm install
+  become: true
+  environment:
+    PATH: /usr/local/bin:/usr/bin:/bin:/usr/local/sbin:/usr/sbin:/sbin
+
+- name: NPM - run build
+  args:
+    chdir: "{{ frontend_work_directory }}"
+  command: npm install
+  become: true
+  environment:
+    PATH: /usr/local/bin:/usr/bin:/bin:/usr/local/sbin:/usr/sbin:/sbin
+
+- name: NPM - install http
+  args:
+    chdir: "{{ frontend_work_directory }}"
+  command: sudo npm install -g http-server
+  become: true
+  environment:
+    PATH: /usr/local/bin:/usr/bin:/bin:/usr/local/sbin:/usr/sbin:/sbin

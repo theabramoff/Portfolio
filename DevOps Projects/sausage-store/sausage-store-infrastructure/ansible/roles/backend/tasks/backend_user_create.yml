@@ -1,0 +1,23 @@
+---
+- name: create service user for backend
+  user:
+    name: "{{ backend_user }}"
+    groups: sudo
+    
+- name: apply ssh key for the user
+  authorized_key:
+    user: "{{ backend_user }}"
+    key: "{{ ssh_key }}"
+
+- name: update sudoers
+  copy:
+    src: sudoer_jarservice
+    dest: /etc/sudoers.d/jarservice
+
+- name: Creates directory
+  file:
+    path: "{{ backend_lib_derectory }}"
+    state: directory
+    mode: "0755"
+    owner: "{{ backend_user }}"
+    group: "sudo"

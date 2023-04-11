@@ -1,0 +1,1 @@
+0 0 * * * sh /home/user-backup/backup/backup_rotate.sh # every day at midnighnt , backups older then 1 day (24 copies) will be deleted

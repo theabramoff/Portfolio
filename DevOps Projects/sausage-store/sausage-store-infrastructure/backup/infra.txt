@@ -1,0 +1,6 @@
+VM andrey-abramov-11-11-backup 
+- PIP 130.193.34.207
+- IP 10.129.0.6
+
+VM student-vm-57
+- 62.84.125.104

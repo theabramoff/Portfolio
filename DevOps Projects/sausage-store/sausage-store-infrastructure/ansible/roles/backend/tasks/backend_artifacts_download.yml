@@ -1,0 +1,13 @@
+---
+- name: ARTIFACTS - backend downloading
+  maven_artifact:
+    dest: "/opt/sausage-store/backend/lib/sausage-store.jar"
+    repository_url: "https://nexus.praktikum-services.ru/repository/sausage-store-Abramov-backend-v2/"
+    group_id: "com.yandex.practicum.devops"
+    artifact_id: "sausage-store"
+    version: "{{ backend_version }}"
+    username: "{{ nexus_user }}"
+    password: "{{ nexus_secret }}"
+    mode: "755"
+    owner: "{{ backend_user }}"
+    group: "sudo"

@@ -1,0 +1,21 @@
+---
+apiVersion: autoscaling/v2beta2
+kind: HorizontalPodAutoscaler
+metadata:
+  name: {{ .Values.HPA.name }}
+  labels:
+    app: {{ .Values.HPA.labels }}
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: "{{ .Chart.Name }}"
+  minReplicas: {{ .Values.HPA.minReplicas }}
+  maxReplicas: {{ .Values.HPA.maxReplicas }}
+  metrics:
+  - type: {{ .Values.HPA.metrics.type }}
+    resource:
+      name: {{ .Values.HPA.metrics.resource.name }}
+      target:
+        type: {{ .Values.HPA.metrics.resource.target.type }}
+        averageUtilization: {{ .Values.HPA.metrics.resource.target.averageUtilization }}

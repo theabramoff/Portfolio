@@ -1,0 +1,55 @@
+---
+groups:
+  - name: Sausage store rules
+    rules:
+    - alert: InstanceDown
+      expr: up{job="backend"} == 0
+      for: 1m
+      labels:
+        severity: critical
+        project: "sausage_store"
+        component: "Backend"
+        messenger: "telegram"
+      annotations:
+        summary: "{{ $labels.instance }} is down"
+        description: "{{ $labels.instance }} is down for more than 1 minute."
+        sender: "Prometheus std-010-057"
+
+    - alert: Http500Errors
+      expr: sum(rate(http_server_requests_seconds_bucket{status="500"}[5m])) by (job) > 0
+      for: 1m
+      labels:
+        severity: warning
+        project: "sausage_store"
+        component: "Backend"
+        messenger: "telegram"
+      annotations:
+        summary: "HTTP 500 Errors on {{ $labels.instance }}"
+        description: "{{ $labels.instance }} - HTTP 500 errors detected."
+        sender: "Prometheus std-010-057"
+
+    - alert: SlowSuccesfullPostRequests
+      expr: histogram_quantile(0.95, sum(rate(http_server_requests_seconds_bucket{instance="backend:8080",job="backend",method="POST",outcome="SUCCESS",status="201",uri="/api/orders"}[5m])) by (le)) > 0.1
+      for: 5m
+      labels:
+        severity: warning
+        project: "sausage_store"
+        component: "Backend"
+        messenger: "telegram"
+      annotations:
+        summary: "Slow POST Requests in {{ $labels.instance }}"
+        description: "{{ $labels.instance }} - Slow POST requests detected."
+        sender: "Prometheus std-010-057"
+
+    - alert: BackendErrors
+      expr: sum(rate(http_server_requests_seconds_count{instance="backend:8080",uri="/actuator/prometheus",status!~"2.."}[2m])) by (instance) > 0
+      for: 2m
+      labels:
+        severity: critical
+        project: "sausage_store"
+        component: "Backend"
+        messenger: "telegram"
+      annotations:
+        summary: "HTTP 500 Errors on {{ $labels.instance }}"
+        description: "The {{ $labels.instance }} is returning non-2xx HTTP status codes for /actuator/prometheus"
+        sender: "Prometheus std-010-057"

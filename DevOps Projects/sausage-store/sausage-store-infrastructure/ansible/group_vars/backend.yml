@@ -1,0 +1,12 @@
+
+backend_user: jarservice
+
+backend_lib_derectory: /opt/sausage-store/backend/lib/
+
+java_version: openjdk-16-jdk
+
+python_pip_version: python3-pip  # requires for maven module
+
+python_lxml_version: python3-lxml # requires for maven module
+
+backend_version: latest

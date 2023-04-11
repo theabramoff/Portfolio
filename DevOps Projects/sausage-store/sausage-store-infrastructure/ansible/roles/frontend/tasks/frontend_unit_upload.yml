@@ -1,0 +1,15 @@
+---
+- name: upload frontend unit
+  copy:
+    src: sausage-store-frontend.service
+    dest: /etc/systemd/system/sausage-store-frontend.service
+
+- name: daemon reload
+  systemd:
+    daemon_reload: yes
+
+- name: start frontend service
+  service:
+    name: sausage-store-frontend
+    state: started 
+    enabled: true

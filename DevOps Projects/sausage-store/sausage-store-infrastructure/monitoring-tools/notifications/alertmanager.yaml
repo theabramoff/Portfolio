@@ -1,0 +1,26 @@
+global:
+  resolve_timeout: 1m
+
+templates:
+- '/etc/alertmanager/template/*.tmpl'
+
+route:
+group_wait: 10s
+group_interval: 30s
+repeat_interval: 30m
+receiver: "telegram"
+routes:
+  - receiver: "telegram"
+    group_wait: 10s
+    match_re:
+      severity: critical|warning
+    continue: true
+
+receivers:
+- name: "telegram"
+telegram_configs:
+  - send_resolved: true
+    bot_token: '{{ .Values.telegram_bot_token }}'
+    chat_id: {{ .Values.telegram_chat_id }}
+    parse_mode: ''
+    message: "{{ "{{" }} range .Alerts {{ "}}" }}{{ "{{" }} .Labels.severity {{ "}}" }}\n{{ "{{" }} .Annotations.sender }}\n{{ "{{" }} .Annotations.summary }}\n{{ "{{" }} .Annotations.description }}\n{{ "{{" }} end {{ "}}" }}"

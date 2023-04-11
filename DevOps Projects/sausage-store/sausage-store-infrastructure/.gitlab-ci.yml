@@ -1,0 +1,57 @@
+---
+variables:
+  VERSION: 0.1.2
+
+stages:
+  - build
+  - release
+  - deploy
+
+build-chart:
+  stage: build
+  script:
+    - echo "Installing Helm"
+    - curl https://raw.githubusercontent.com/kubernetes/helm/master/scripts/get-helm-3 | bash
+    - echo "Building Helm chart"
+    - cd helm/sausage-store-chart
+    - echo "Packing the chart"
+    - helm package .
+  artifacts:
+    paths:
+      - ./helm/sausage-store-chart/sausage-store-${VERSION}.tgz
+  only:
+    changes:
+      - helm/**/*
+
+
+release_chart:
+  stage: release
+  script:
+    - cd helm/sausage-store-chart
+    - |
+      if [ ! -f sausage-store-${VERSION}.tgz ]; then
+        echo "Error: sausage-store-${VERSION}.tgz not found"
+        exit 1
+      fi
+    - echo "Pushing chart to Nexus"
+    - curl -u ${NEXUS_USER}:${NEXUS_PASSWORD} ${NEXUS_HELM_REPO} --upload-file sausage-store-${VERSION}.tgz
+    - if [ "$?" -ne 0 ]; then exit 1; fi
+  only:
+    changes:
+      - helm/**/*
+
+deploy_to_argocd:
+  stage: deploy
+  image: argoproj/argocd:v2.3.3
+  script:
+    - argocd app get 'sausage-store-theabramoff' --auth-token ${ARGO_TOKEN} --server ${ARGO_SERVER} --grpc-web
+    - argocd app set 'sausage-store-theabramoff' --auth-token ${ARGO_TOKEN} --server ${ARGO_SERVER} --revision ${VERSION} --grpc-web
+    #- argocd app sync 'sausage-store-theabramoff' --auth-token ${ARGO_TOKEN} --server ${ARGO_SERVER} --grpc-web
+  when: manual #This setting turns a job into a manual one
+  only:
+    changes:
+      - helm/**/*  
+  environment:
+    name: deploy_to_argocd
+    url: https://argocd.k8s.praktikum-services.tech/
+

@@ -1,0 +1,20 @@
+[Unit]
+Description=Frontend service
+After=syslog.target network.target
+
+[Service]
+WorkingDirectory=/var/www-data/frontend/dist/frontend/
+
+ExecStart=/usr/bin/http-server /var/www-data/frontend/dist/frontend/ -p 80 --proxy http://localhost:8080 -s
+
+StandardOutput=/opt/log/sausage-store-frontend.log
+
+User=frontend
+
+Type=simple
+
+Restart=on-failure
+RestartSec=10
+
+[Install]
+WantedBy=multi-user.target

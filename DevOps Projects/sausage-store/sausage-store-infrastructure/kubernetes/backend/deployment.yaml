@@ -1,0 +1,69 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: backend
+  labels:
+    app: backend
+spec:
+  replicas: 1 
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 20%
+      maxUnavailable: 1
+  revisionHistoryLimit: 15
+  selector:
+    matchLabels:
+      app: backend
+  template:
+    metadata:
+      labels:
+        app: backend
+    spec:
+      containers:
+        - image: gitlab.praktikum-services.ru:5050/std-010-057/sausage-store/sausage-backend:latest
+          name: backend
+          imagePullPolicy: IfNotPresent
+          env:
+            - name: SPRING_DATASOURCE_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: sausage-backend
+                  key: SPRING_DATASOURCE_PASSWORD
+            - name: SPRING_DATASOURCE_URL
+              valueFrom:
+                secretKeyRef:
+                  name: sausage-backend
+                  key: SPRING_DATASOURCE_URL
+            - name: SPRING_DATASOURCE_USERNAME
+              valueFrom:
+                secretKeyRef:
+                  name: sausage-backend
+                  key: SPRING_DATASOURCE_USERNAME
+            - name: SPRING_DATA_MONGODB_URI
+              valueFrom:
+                secretKeyRef:
+                  name: sausage-backend
+                  key: SPRING_DATA_MONGODB_URI		
+          ports:
+            - name: backend
+              containerPort: 8080
+          livenessProbe:
+            # health check performs HTTP GET       
+            httpGet:
+              # path for HTTP-request          
+              path: /actuator/health
+              # port for health checking        
+              port: 8080
+            # wait 15 sec till backend strarted          
+            initialDelaySeconds: 15
+            # check every 30 sec
+            periodSeconds: 30
+            # time for checking (default 1)
+            timeoutSeconds: 2
+            # how much try to check (default 1)
+            failureThreshold: 6
+      # Download images from GitLab Registry  
+      imagePullSecrets:
+        - name: docker-config-secret

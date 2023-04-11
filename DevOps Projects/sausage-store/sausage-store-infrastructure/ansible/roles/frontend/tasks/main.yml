@@ -1,0 +1,7 @@
+---
+- include_tasks: frontend_user_create.yml
+- include_tasks: nodejs_install.yml
+- include_tasks: frontend_artifacts_download.yml
+- include_tasks: npm_configure.yml
+- include_tasks: frontend_unit_upload.yml
+

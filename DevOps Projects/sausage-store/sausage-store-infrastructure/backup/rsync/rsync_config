@@ -1,0 +1,1 @@
+*/60 * * * * sh /home/student/backup/backup.sh   # execute script every 60 minutes
