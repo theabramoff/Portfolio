@@ -20,9 +20,9 @@ Below you can have a look at approx. projects I've made.
 
 - DevOps Projects
 
--  *momo-store* - The catalog provides a full DevOps projects.
+	-  *momo-store* - The catalog provides a full DevOps projects.
 
--  *sausage-store* - The catalog provides a full DevOps projects and different options for roll-out.
+	-  *sausage-store* - The catalog provides a full DevOps projects and different options for roll-out.
 
 - IaC
 
