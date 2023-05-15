@@ -45,7 +45,7 @@ $newVM = "< ... >"
 $oper_status = "< ... >"
 
 # new RG name
-$newresourceGroupName = "RGRP-$newVM-$oper_status"
+$newresourceGroupName = "rg-$newVM-$oper_status"
 
 # tags
 # Replace < ... > with new tags defentitions
@@ -133,7 +133,7 @@ $Data_02_new = "vhd-$newVM-Disk-02"
 
 $created_RG = New-AzResourceGroup -Name $newresourceGroupName -Location $location -Tag @{
 'IT Owner Group' = $ITOwnerGroup; 
-'Owned by' = $Ownedby; 
+'OwnedBy' = $Ownedby; 
 'Owner Backup Person' = $OwnerBackupPerson; 
 'Description' = $Description; 
 'Region' = $Region;

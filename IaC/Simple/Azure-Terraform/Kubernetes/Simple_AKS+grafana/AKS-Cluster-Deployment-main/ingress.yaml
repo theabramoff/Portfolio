@@ -1,0 +1,121 @@
+kind: Ingress
+apiVersion: networking.k8s.io/v1
+metadata:
+  name: nginx-ingress
+  namespace: c1g1755aks
+  uid: a1acf91e-ae48-4486-a00f-0e1b6ba57f87
+  resourceVersion: '92580448'
+  generation: 1
+  creationTimestamp: '2021-06-18T12:50:48Z'
+  labels:
+    app: c1g1755aks-elasticsearch
+    role: data
+  annotations:
+    kubectl.kubernetes.io/last-applied-configuration: >
+      {"apiVersion":"networking.k8s.io/v1","kind":"Ingress","metadata":{"annotations":{"kubernetes.io/ingress.allow-http":"false","kubernetes.io/ingress.class":"nginx","kubernetes.io/tls-acme":"true","nginx.ingress.kubernetes.io/auth-realm":"Authentication
+      Required","nginx.ingress.kubernetes.io/auth-secret":"c1g1755aks-elasticsearch-basicauth","nginx.ingress.kubernetes.io/auth-type":"basic","nginx.ingress.kubernetes.io/client-body-buffer-size":"16k","nginx.ingress.kubernetes.io/connection-proxy-header":"keep-alive","nginx.ingress.kubernetes.io/force-ssl-redirect":"true","nginx.ingress.kubernetes.io/limit-connections":"500","nginx.ingress.kubernetes.io/limit-rate":"0","nginx.ingress.kubernetes.io/limit-rate-after":"0","nginx.ingress.kubernetes.io/limit-rps":"100","nginx.ingress.kubernetes.io/proxy-body-size":"0","nginx.ingress.kubernetes.io/proxy-buffer-size":"8k","nginx.ingress.kubernetes.io/proxy-buffering":"on","nginx.ingress.kubernetes.io/proxy-connect-timeout":"60","nginx.ingress.kubernetes.io/proxy-read-timeout":"600","nginx.ingress.kubernetes.io/proxy-send-timeout":"600","nginx.ingress.kubernetes.io/rewrite-target":"/","nginx.ingress.kubernetes.io/ssl-redirect":"true","nginx.ingress.kubernetes.io/whitelist-source-range":"0.0.0.0/0","nginx.org/ssl-services":"c1g1755aks-elasticsearch-data"},"labels":{"app":"c1g1755aks-elasticsearch","role":"data"},"name":"c1g1755aks-elasticsearch-ingress","namespace":"c1g1755aks"},"spec":{"rules":[{"host":"c1g1755aks.archive2azure.net","http":{"paths":[{"backend":{"service":{"name":"c1g1755aks-elasticsearch-data","port":{"number":9200}}},"path":"/","pathType":"ImplementationSpecific"}]}},{"host":"kibana-c1g1755aks.archive2azure.net","http":{"paths":[{"backend":{"service":{"name":"c1g1755aks-kibana-node","port":{"number":5601}}},"path":"/","pathType":"ImplementationSpecific"}]}}],"tls":[{"hosts":["c1g1755aks.archive2azure.net","kibana-c1g1755aks.archive2azure.net"],"secretName":"c1g1755aks-elasticsearch-tls"}]}}
+    kubernetes.io/ingress.allow-http: 'false'
+    kubernetes.io/ingress.class: nginx
+    kubernetes.io/tls-acme: 'true'
+    nginx.ingress.kubernetes.io/auth-realm: Authentication Required
+    nginx.ingress.kubernetes.io/auth-secret: c1g1755aks-elasticsearch-basicauth
+    nginx.ingress.kubernetes.io/auth-type: basic
+    nginx.ingress.kubernetes.io/client-body-buffer-size: 16k
+    nginx.ingress.kubernetes.io/connection-proxy-header: keep-alive
+    nginx.ingress.kubernetes.io/force-ssl-redirect: 'true'
+    nginx.ingress.kubernetes.io/limit-connections: '500'
+    nginx.ingress.kubernetes.io/limit-rate: '0'
+    nginx.ingress.kubernetes.io/limit-rate-after: '0'
+    nginx.ingress.kubernetes.io/limit-rps: '100'
+    nginx.ingress.kubernetes.io/proxy-body-size: '0'
+    nginx.ingress.kubernetes.io/proxy-buffer-size: 8k
+    nginx.ingress.kubernetes.io/proxy-buffering: 'on'
+    nginx.ingress.kubernetes.io/proxy-connect-timeout: '60'
+    nginx.ingress.kubernetes.io/proxy-read-timeout: '600'
+    nginx.ingress.kubernetes.io/proxy-send-timeout: '600'
+    nginx.ingress.kubernetes.io/rewrite-target: /
+    nginx.ingress.kubernetes.io/ssl-redirect: 'true'
+    nginx.ingress.kubernetes.io/whitelist-source-range: 0.0.0.0/0
+    nginx.org/ssl-services: c1g1755aks-elasticsearch-data
+  managedFields:
+    - manager: kubectl
+      operation: Update
+      apiVersion: networking.k8s.io/v1
+      time: '2021-06-18T12:50:48Z'
+      fieldsType: FieldsV1
+      fieldsV1:
+        f:metadata:
+          f:annotations:
+            .: {}
+            f:kubectl.kubernetes.io/last-applied-configuration: {}
+            f:kubernetes.io/ingress.allow-http: {}
+            f:kubernetes.io/ingress.class: {}
+            f:kubernetes.io/tls-acme: {}
+            f:nginx.ingress.kubernetes.io/auth-realm: {}
+            f:nginx.ingress.kubernetes.io/auth-secret: {}
+            f:nginx.ingress.kubernetes.io/auth-type: {}
+            f:nginx.ingress.kubernetes.io/client-body-buffer-size: {}
+            f:nginx.ingress.kubernetes.io/connection-proxy-header: {}
+            f:nginx.ingress.kubernetes.io/force-ssl-redirect: {}
+            f:nginx.ingress.kubernetes.io/limit-connections: {}
+            f:nginx.ingress.kubernetes.io/limit-rate: {}
+            f:nginx.ingress.kubernetes.io/limit-rate-after: {}
+            f:nginx.ingress.kubernetes.io/limit-rps: {}
+            f:nginx.ingress.kubernetes.io/proxy-body-size: {}
+            f:nginx.ingress.kubernetes.io/proxy-buffer-size: {}
+            f:nginx.ingress.kubernetes.io/proxy-buffering: {}
+            f:nginx.ingress.kubernetes.io/proxy-connect-timeout: {}
+            f:nginx.ingress.kubernetes.io/proxy-read-timeout: {}
+            f:nginx.ingress.kubernetes.io/proxy-send-timeout: {}
+            f:nginx.ingress.kubernetes.io/rewrite-target: {}
+            f:nginx.ingress.kubernetes.io/ssl-redirect: {}
+            f:nginx.ingress.kubernetes.io/whitelist-source-range: {}
+            f:nginx.org/ssl-services: {}
+          f:labels:
+            .: {}
+            f:app: {}
+            f:role: {}
+        f:spec:
+          f:rules: {}
+          f:tls: {}
+    - manager: nginx-ingress-controller
+      operation: Update
+      apiVersion: networking.k8s.io/v1
+      time: '2022-05-16T14:31:54Z'
+      fieldsType: FieldsV1
+      fieldsV1:
+        f:status:
+          f:loadBalancer:
+            f:ingress: {}
+      subresource: status
+spec:
+  tls:
+    - hosts:
+        - c1g1755aks.archive2azure.net
+        - kibana-c1g1755aks.archive2azure.net
+      secretName: c1g1755aks-elasticsearch-tls
+  rules:
+    - host: c1g1755aks.archive2azure.net
+      http:
+        paths:
+          - path: /
+            pathType: ImplementationSpecific
+            backend:
+              service:
+                name: c1g1755aks-elasticsearch-data
+                port:
+                  number: 9200
+    - host: kibana-c1g1755aks.archive2azure.net
+      http:
+        paths:
+          - path: /
+            pathType: ImplementationSpecific
+            backend:
+              service:
+                name: c1g1755aks-kibana-node
+                port:
+                  number: 5601
+status:
+  loadBalancer:
+    ingress:
+      - ip: 104.45.74.129

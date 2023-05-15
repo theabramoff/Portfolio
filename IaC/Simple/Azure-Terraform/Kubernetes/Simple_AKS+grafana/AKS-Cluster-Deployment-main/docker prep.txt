@@ -1,0 +1,13 @@
+choco install docker-cli
+choco install docker-machine
+choco install docker-compose
+choco install docker-desktop
+
+az acr login -n acrabramovtrftest --expose-token
+
+
+az acr login --name acrabramovtrftest --username acrabramovtrftest --password eT3fQGf8tj1K2Gd9Qm/vCOUdAc4Tcand
+             [--password]
+             [--resource-group]
+             [--suffix]
+             [--username]

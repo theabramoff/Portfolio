@@ -45,7 +45,7 @@ $newVM = "< ... >"
 $oper_status = "< ... >"
 
 # new RG name
-$newresourceGroupName = "RGRP-$newVM-$oper_status"
+$newresourceGroupName = "rg-$newVM-$oper_status"
 
 # tags
 # Replace < ... > with new tags defentitions
@@ -131,7 +131,7 @@ $Data_02_new = "vhd-$newVM-Disk-02"
 
 New-AzResourceGroup -Name $newresourceGroupName -Location $location -Tag @{
 'IT Owner Group' = $ITOwnerGroup; 
-'Owned by' = $Ownedby; 
+'OwnedBy' = $Ownedby; 
 'Owner Backup Person' = $OwnerBackupPerson; 
 'Description' = $Description; 
 'Region' = $Region;
@@ -191,7 +191,7 @@ $Data02_Disk = New-AzDisk -Disk $diskConfig_Data02 -ResourceGroupName $newresour
 
 # vnet and snet for nic
 $vNet = Get-AzVirtualNetwork -Name $vNet_name
-$sNet = ((Get-AzVirtualNetwork -Name $vNet_name).Subnets | Where name -Like $sNet_name).id
+$sNet = ((Get-AzVirtualNetwork -Name $vNet_name).Subnets | Where-Object name -Like $sNet_name).id
 
 #NIC for clone VM + Accelerated networking
 $nicName = "nic-$originalVM"

@@ -1,0 +1,14 @@
+#
+#
+#
+#resource group for the environment
+resource "azurerm_resource_group" "tf-rg" {
+  name     = "rg-${var.prefix}"
+  location = var.location
+
+  tags = var.tags
+
+}
+
+
+
