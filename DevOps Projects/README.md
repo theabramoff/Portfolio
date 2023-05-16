@@ -26,11 +26,11 @@ Both projects do meet principals of Twelve-Factor App methodology:
  7. Port binding
 		*- Each application component has its own port for work with it*
  8. Concurrency
-		*- Each application component has ability to scale out *
+		*- Each application component has ability to scale out*
  9. Disposability
 		*- The applications are reliable and stateless - have minimum impact against shutdown and restart* 
  10. Dev/prod parity
- 		*- In the provided examples, there's only a single environment, but in case of several environments it's convenient to organize it *
+ 		*- In the provided examples, there's only a single environment, but in case of several environments it's convenient to organize it*
  11. Logs
   		*- For both Application Logging (Loki), Monitoring (Grafana) and Alerting (Prometheus & Alertmanager) tolls are considered*
  12. Admin processes
