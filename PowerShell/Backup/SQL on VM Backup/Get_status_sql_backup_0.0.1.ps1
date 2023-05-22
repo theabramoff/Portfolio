@@ -13,4 +13,4 @@ Select-AzSubscription "< ... >"
 $vault = "< ... >"
 $targetVault = Get-AzRecoveryServicesVault -name $vault
 $bkpItems = Get-AzRecoveryServicesBackupItem -BackupManagementType AzureWorkload -WorkloadType MSSQL -VaultId $targetVault.ID
-$bkpItems | sort ProtectionStatus >> "c:\temp\sqlbackup.txt"
+$bkpItems | Sort-Object ProtectionStatus >> "c:\temp\sqlbackup.txt"

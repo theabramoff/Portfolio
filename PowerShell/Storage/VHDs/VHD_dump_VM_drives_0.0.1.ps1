@@ -33,17 +33,17 @@ $VMs= (Get-AzVM).Name
     Write-Host "Working on $VM"
 
     # Condition - if OS Discr is managed - RUN
-    if ((Get-azvm -name $VM).StorageProfile.OsDisk.ManagedDisk -ne $null) 
+    if ($null -ne (Get-azvm -name $VM).StorageProfile.OsDisk.ManagedDisk) 
         {
-        $DriveCapacity = (Get-AzDisk | where ManagedBy -Match $VM | select DiskSizeGB | Measure-Object -sum DiskSizeGB).Sum
+        $DriveCapacity = (Get-AzDisk | Where-Object ManagedBy -Match $VM | Select-Object DiskSizeGB | Measure-Object -sum DiskSizeGB).Sum
     #Write-host "$VM drives capacity is $DriveCapacity"
         $array += New-Object PSObject -Property @{VM = "$VM"; Subscription= "$Sub"; DrivesCapacity = $DriveCapacity; Type= "managed" }
         }
         # if OS disk is not managed - run
         Else
                 {
-                    $OSDriveUnm = ((Get-AzVM -Name $vm).StorageProfile.OsDisk | select DiskSizeGB | Measure-Object -Sum DiskSizeGB).sum
-                    $DataDisksUnm = ((Get-AzVM -Name $vm).StorageProfile.DataDisks | select DiskSizeGB | Measure-Object -Sum DiskSizeGB).sum
+                    $OSDriveUnm = ((Get-AzVM -Name $vm).StorageProfile.OsDisk | Select-Object DiskSizeGB | Measure-Object -Sum DiskSizeGB).sum
+                    $DataDisksUnm = ((Get-AzVM -Name $vm).StorageProfile.DataDisks | Select-Object DiskSizeGB | Measure-Object -Sum DiskSizeGB).sum
                     $DriveCapacity = $OSDriveUnm+$DataDisksUnm
                     #Write-host "$VM drives capacity is $DriveCapacity"
                     $array += New-Object PSObject -Property @{VM = "$VM"; Subscription= "$Sub"; DrivesCapacity = $DriveCapacity; Type= "unmanaged"}

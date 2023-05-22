@@ -42,4 +42,4 @@ $snapshot = Get-AzSnapshot -ResourceGroupName $resourceGroupName -SnapshotName $
 #Create a new Managed Disk from the Snapshot provided 
 $diskConfig = New-AzDiskConfig -SkuName $storageType -DiskSizeGB $diskSize -Location $location -CreateOption Copy -SourceResourceId $snapshot.Id
 
-$disk = New-AzDisk -Disk $diskConfig -ResourceGroupName $resourceGroupName -DiskName $diskName  
+New-AzDisk -Disk $diskConfig -ResourceGroupName $resourceGroupName -DiskName $diskName | Out-Null   

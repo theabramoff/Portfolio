@@ -131,7 +131,7 @@ $Data_02_new = "vhd-$newVM-Disk-02"
 
 ####################New RG creation#######################
 
-$created_RG = New-AzResourceGroup -Name $newresourceGroupName -Location $location -Tag @{
+New-AzResourceGroup -Name $newresourceGroupName -Location $location -Tag @{
 'IT Owner Group' = $ITOwnerGroup; 
 'OwnedBy' = $Ownedby; 
 'Owner Backup Person' = $OwnerBackupPerson; 
@@ -139,7 +139,7 @@ $created_RG = New-AzResourceGroup -Name $newresourceGroupName -Location $locatio
 'Region' = $Region;
 'Lifecycle End' = $LifecycleEnd;
 'OperationalStatus' = $OperationalStatus;
-}
+} | Out-Null
 
 ####################Snapshots creation#######################
 
@@ -159,32 +159,32 @@ $config_snapshot_Data02 =  New-AzSnapshotConfig -SourceUri $DataDisk_02_ID -Loca
 
 # config of Data03 snapshot
 $DataDisk_03_ID = (Get-AzDisk -ResourceGroupName $resourceGroupName -DiskName $Data_03).Id
-$config_snapshot_Data03 =  New-AzSnapshotConfig -SourceUri $DataDisk_03_ID -Location $location -CreateOption copy
+New-AzSnapshotConfig -SourceUri $DataDisk_03_ID -Location $location -CreateOption copy | Out-Null
 
 # config of Data04 snapshot
 $DataDisk_04_ID = (Get-AzDisk -ResourceGroupName $resourceGroupName -DiskName $Data_04).Id
-$config_snapshot_Data04 =  New-AzSnapshotConfig -SourceUri $DataDisk_04_ID -Location $location -CreateOption copy
+New-AzSnapshotConfig -SourceUri $DataDisk_04_ID -Location $location -CreateOption copy | Out-Null
 
 # config of Data05 snapshot
 $DataDisk_05_ID = (Get-AzDisk -ResourceGroupName $resourceGroupName -DiskName $Data_05).Id
-$config_snapshot_Data05 =  New-AzSnapshotConfig -SourceUri $DataDisk_05_ID -Location $location -CreateOption copy
+New-AzSnapshotConfig -SourceUri $DataDisk_05_ID -Location $location -CreateOption copy | Out-Null
 
 # config of Data06 snapshot
 $DataDisk_06_ID = (Get-AzDisk -ResourceGroupName $resourceGroupName -DiskName $Data_06).Id
-$config_snapshot_Data06 =  New-AzSnapshotConfig -SourceUri $DataDisk_06_ID -Location $location -CreateOption copy
+New-AzSnapshotConfig -SourceUri $DataDisk_06_ID -Location $location -CreateOption copy | Out-Null
 
 # config of Data07 snapshot
 $DataDisk_07_ID = (Get-AzDisk -ResourceGroupName $resourceGroupName -DiskName $Data_07).Id
-$config_snapshot_Data07 =  New-AzSnapshotConfig -SourceUri $DataDisk_07_ID -Location $location -CreateOption copy
+New-AzSnapshotConfig -SourceUri $DataDisk_07_ID -Location $location -CreateOption copy | Out-Null
 
 # creation of OS snapshot
-$snap1 = New-AzSnapshot -Snapshot $config_snapshot_OS -SnapshotName $Os_Drive_snap -ResourceGroupName $newresourceGroupName
+New-AzSnapshot -Snapshot $config_snapshot_OS -SnapshotName $Os_Drive_snap -ResourceGroupName $newresourceGroupName | Out-Null
 
 # creation of Data01 snapshot
-$snap2 = New-AzSnapshot -Snapshot $config_snapshot_Data01 -SnapshotName $Data_01_snap -ResourceGroupName $newresourceGroupName
+New-AzSnapshot -Snapshot $config_snapshot_Data01 -SnapshotName $Data_01_snap -ResourceGroupName $newresourceGroupName | Out-Null
 
 #creation of Data02 snapshot
-$snap3 = New-AzSnapshot -Snapshot $config_snapshot_Data02 -SnapshotName $Data_02_snap -ResourceGroupName $newresourceGroupName
+New-AzSnapshot -Snapshot $config_snapshot_Data02 -SnapshotName $Data_02_snap -ResourceGroupName $newresourceGroupName | Out-Null
 
 # creation of OS Drive from snapshot
 $Os_DiskSize = (Get-AzDisk -ResourceGroupName $resourceGroupName -DiskName $Os_Drive).DiskSizeGB   
@@ -209,7 +209,7 @@ $Data02_Disk = New-AzDisk -Disk $diskConfig_Data02 -ResourceGroupName $newresour
 #-------------VM config----------------#
 
 # vnet and snet for nic
-$vNet = Get-AzVirtualNetwork -Name $vNet_name
+Get-AzVirtualNetwork -Name $vNet_name | Out-Null
 $sNet = ((Get-AzVirtualNetwork -Name $vNet_name).Subnets | Where-Object name -Like $sNet_name).id
 
 # NIC for clone VM + Accelerated networking
@@ -238,12 +238,12 @@ $diag_storage_account_name = (Get-AzStorageAccount -ResourceGroupName $storage_a
 $VM = Set-AzVMBootDiagnostic -VM $VM -Enable -ResourceGroupName $storage_account_rg -StorageAccountName $diag_storage_account_name
 
 # Deployment of the VM
-$deployment = New-AzVM -ResourceGroupName $newresourceGroupName -Location $location -VM $VM -LicenseType "Windows_Server"
+New-AzVM -ResourceGroupName $newresourceGroupName -Location $location -VM $VM -LicenseType "Windows_Server" | Out-Null
 
 # set up Azure VM backup
 $vault = Get-AzRecoveryServicesVault -Name $backup_vault 
 $policy = Get-AzRecoveryServicesBackupProtectionPolicy -Name $policy_name -VaultId $vault.ID
-$backup = Enable-AzRecoveryServicesBackupProtection -Policy $policy -Name $newVM -ResourceGroupName $newresourceGroupName -VaultId $vault.ID
+Enable-AzRecoveryServicesBackupProtection -Policy $policy -Name $newVM -ResourceGroupName $newresourceGroupName -VaultId $vault.ID | Out-Null
 
 # set up SQL IaaS extention
 # To be set up in Full afterwards
@@ -260,13 +260,13 @@ Set-AzVMDiagnosticsExtension -ResourceGroupName $newresourceGroupName -VMName $n
 ################ Junk removal ################
 
 # delition of OS snapshot
-$snap1_removal = Remove-AzSnapshot -ResourceGroupName $newresourceGroupName -SnapshotName $Os_Drive_snap -Force
+Remove-AzSnapshot -ResourceGroupName $newresourceGroupName -SnapshotName $Os_Drive_snap -Force | Out-Null
 
 # delition of Data01 snapshot
-$snap2_removal = Remove-AzSnapshot -ResourceGroupName $newresourceGroupName -SnapshotName $Data_01_snap -Force
+Remove-AzSnapshot -ResourceGroupName $newresourceGroupName -SnapshotName $Data_01_snap -Force | Out-Null
 
 # delition of Data02 snapshot
-$snap3_removal = Remove-AzSnapshot -ResourceGroupName $newresourceGroupName -SnapshotName $Data_02_snap -Force
+Remove-AzSnapshot -ResourceGroupName $newresourceGroupName -SnapshotName $Data_02_snap -Force | Out-Null
 
 # stop timer
 $watch.Stop() 

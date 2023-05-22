@@ -16,6 +16,6 @@ $subscriptions = Get-AzSubscription
 Foreach ($subscription in $subscriptions)
 {
     (Select-AzSubscription "$Subscription").Subscription.Name
-    Get-AzDisk |  Where-Object {($_.DiskState -eq 'unattached') -and ($_.ManagedBy -eq $null) } | Select-Object ResourceGroupName, Name, DiskState, Tags | ft >> $file
+    Get-AzDisk |  Where-Object {($_.DiskState -eq 'unattached') -and ($_.ManagedBy -eq $null) } | Select-Object ResourceGroupName, Name, DiskState, Tags | Format-Table >> $file
 }
 

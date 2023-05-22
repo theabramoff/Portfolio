@@ -13,7 +13,7 @@ Select-AzSubscription "< ... >"
 $array = @()
 # Replace < ... > with sa name
 $StorageAccountName = "< ... >"
-    $storageAccount = Get-AzStorageAccount | where StorageAccountName -Like $StorageAccountName
+    $storageAccount = Get-AzStorageAccount | Where-Object StorageAccountName -Like $StorageAccountName
     $storageKey = (Get-AzStorageAccountKey -ResourceGroupName $storageAccount.ResourceGroupName -Name $storageAccount.StorageAccountName)[0].Value
     $context = New-AzStorageContext -StorageAccountName $storageAccount.StorageAccountName -StorageAccountKey $storageKey
     $containers = Get-AzStorageContainer -Context $context

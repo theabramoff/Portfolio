@@ -14,7 +14,7 @@ $vmName = "< ... >"
 #Replace < ... > with vm size, e.g. Standard_B2ms
 $vmSize = "< ... >"
 #Replace < ... > with existing vnet name
-$vnetName = "vnet-msfnep02-01-sap-asr"
+$vnetName = "< ... >"
 
 Connect-AzAccount
 #Replace < ... > with subscription name

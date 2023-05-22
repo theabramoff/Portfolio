@@ -190,7 +190,7 @@ $Data02_Disk = New-AzDisk -Disk $diskConfig_Data02 -ResourceGroupName $newresour
 #-------------VM config----------------#
 
 # vnet and snet for nic
-$vNet = Get-AzVirtualNetwork -Name $vNet_name
+Get-AzVirtualNetwork -Name $vNet_name | Out-Null
 $sNet = ((Get-AzVirtualNetwork -Name $vNet_name).Subnets | Where-Object name -Like $sNet_name).id
 
 #NIC for clone VM + Accelerated networking

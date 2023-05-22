@@ -67,8 +67,6 @@ $Data_Drive01_snap = "< ... >"
 $Data_Drive02_snap = "< ... >"
 
 #-------------Target Drives----------------#
-# original OS drive name
-$Os_Drive = "< ... >" 
 # original Data01 drive name
 $Data01_Drive = "< ... >" 
 # original Data02 drive name

@@ -1,6 +1,9 @@
 #########################################
-# Az module required
+# Based on AzureRM module - outadated
 # this script deployes a VM from existing internet facing VM VHDs to new RGs using snapshots
+# To do:
+# - Change AzureRM module to Az
+# - Change Approach for clonning drives - managed disks to be used
 #########################################
 
 # Replace < ... > with a path, e.g. c:\temp\
@@ -35,7 +38,7 @@ $newLocation = "< ... >"
 # Replace < ... > with new sa
 $newStorageAccountName = "< ... >"
 
-$originalVM = get-azurermvm -ResourceGroupName $rg -Name $vmName
+$originalVM = get-azurermvm  -ResourceGroupName $rg -Name $vmName
 
 ("VM Name: " + $originalVM.Name) | Out-File -FilePath $file 
 ("Extensions: " + $originalVM.Extensions) | Out-File -FilePath $file -Append
@@ -50,8 +53,8 @@ if ($originalVM.StorageProfile.DataDisks) {
     }   
 }
 
-$newStorageAccount = Get-AzureRmStorageAccount -ResourceGroupName $newRG -Name $newStorageAccountName
-$storKey=Get-AzureRmStorageAccountKey -ResourceGroupName $newRG -Name $newStorageAccountName
+Get-AzureRmStorageAccount -ResourceGroupName $newRG -Name $newStorageAccountName | Out-Null
+$storKey = Get-AzureRmStorageAccountKey -ResourceGroupName $newRG -Name $newStorageAccountName
 $storageContext = New-AzureStorageContext -StorageAccountName $newStorageAccountName -StorageAccountKey $storKey[0].Value
 New-AzureStorageContainer -Context $storageContext -Name vhds
 
@@ -85,7 +88,7 @@ while ($true) {
         }
     }
     write-host $stringOut
-    sleep 30
+    Start-Sleep 30
 }
 
 # create vm from VHD
@@ -105,10 +108,10 @@ if ($originalVM.StorageProfile.DataDisks) {
     }
 }
 
-$newPIP=New-AzureRmPublicIpAddress -Name ('pip-'+$vmName) -ResourceGroupName $newRG -Location $newLocation -AllocationMethod Dynamic
+$newPIP = New-AzureRmPublicIpAddress -Name ('pip-'+$vmName) -ResourceGroupName $newRG -Location $newLocation -AllocationMethod Dynamic
 $newNSGObj = New-AzureRmNetworkSecurityGroup -Name $newNSG -ResourceGroupName $newRg -Location $newLocation
 
-$newVnetObj=New-AzureRmVirtualNetwork -Name $newVnet -ResourceGroupName $newRG -Location $newLocation -AddressPrefix $vnetRange
+$newVnetObj = New-AzureRmVirtualNetwork -Name $newVnet -ResourceGroupName $newRG -Location $newLocation -AddressPrefix $vnetRange
 
 Add-AzureRmVirtualNetworkSubnetConfig -Name $newSnet -VirtualNetwork $newVnetObj -AddressPrefix $vnetRange -NetworkSecurityGroupId $newNSGObj.Id
 $newVnetObj | Set-AzureRmVirtualNetwork

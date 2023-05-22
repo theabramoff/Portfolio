@@ -7,7 +7,6 @@
 $mask = "backup"
 # Replace < ... > with a path, e.g. c:\temp\
 param(
-    [string]$tenantId="",
     [string]$file="< ... >\Azure-dump_" + ($mask) + "_drives_" + (get-date -format yyyy) + "_" + (get-date -format MM) + "_" + (get-date -format dd) + ".csv"
 ) 
 #start timer
@@ -27,9 +26,9 @@ foreach ($vm in $VMs)
     {
 
     
-        $drive = ((Get-AzVM -Name $vm ).StorageProfile.DataDisks | where name -Match "backup").name
+        $drive = ((Get-AzVM -Name $vm ).StorageProfile.DataDisks | Where-Object name -Match "backup").name
         
-            If  ($drive -ne $null)
+            If  ($null -ne $drive)
             {
             $array += New-Object PSObject -Property @{Subsctiption="$subsription"; VM = "$vm"; Drive="$drive"}
             }
