@@ -35,11 +35,11 @@ module "kubernetes-01" {
 # Tagging
 #---------------------------------------
     project_tags = {
-        "Region":"USA",
+        Region:"USA",
         OwnedBy:"Abramov, Andrey",
         OwnerBackupPerson:"N/A",
         ITOwnerGroup:"N/A",
-        "Description":"Kubernetes for test",
-        "Lifecycle End":"31DEC2023"
+        Description:"Kubernetes for test",
+        LifecycleEnd:"31DEC2023"
     }
 }

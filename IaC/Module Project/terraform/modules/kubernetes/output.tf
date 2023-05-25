@@ -9,7 +9,7 @@ output "vnet-output" {
 output "snet-output" {
   value = azurerm_subnet.snet.name
 }
-/*
+
 output "ask-output" {
   value = azurerm_kubernetes_cluster.kubernetes.name
 }
@@ -19,4 +19,4 @@ output "kube_config" {
 
   sensitive = true
 }
-*/
+

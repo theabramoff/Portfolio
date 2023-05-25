@@ -45,12 +45,12 @@ module "vm-01" {
 
   #tagging
   project_tags = {
-      "Region":"USA",
+      Region:"USA",
       OwnedBy:"Abramov, Andrey",
       OwnerBackupPerson:"N/A",
       ITOwnerGroup:"N/A",
-      "Description":"VM for test",
-      "Lifecycle End":"31DEC2023"
+      Description:"VM for test",
+      LifecycleEnd:"31DEC2023"
     }
 }
 
