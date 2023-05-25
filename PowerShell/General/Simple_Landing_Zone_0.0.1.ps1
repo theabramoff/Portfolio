@@ -1,4 +1,4 @@
-#
+##################
 # Module: Az
 # Resource providers should be registered:
 # - microsoft.insights
@@ -10,6 +10,7 @@
 # - policies - work on timezone improvement
 # - naming via variables
 # - add extra rsvs for SQL
+##################
 
 # replace < ... > with 
 # resource group for diagnostic, replace < ... > with rg name where services for logging will be stored, e.g. rg-az...
