@@ -1,0 +1,26 @@
+pool:
+  name: Azure Pipelines
+#Your build pipeline references an undefined variable named ‘satrfmstate-key1’. Create or edit the build pipeline for this YAML file, define the variable on the Variables tab. See https://go.microsoft.com/fwlink/?linkid=865972
+#Your build pipeline references an undefined variable named ‘sp-client-id’. Create or edit the build pipeline for this YAML file, define the variable on the Variables tab. See https://go.microsoft.com/fwlink/?linkid=865972
+#Your build pipeline references an undefined variable named ‘sp-secret’. Create or edit the build pipeline for this YAML file, define the variable on the Variables tab. See https://go.microsoft.com/fwlink/?linkid=865972
+#Your build pipeline references an undefined variable named ‘sp-tenant-id’. Create or edit the build pipeline for this YAML file, define the variable on the Variables tab. See https://go.microsoft.com/fwlink/?linkid=865972
+
+steps:
+- task: ms-devlabs.custom-terraform-tasks.custom-terraform-installer-task.TerraformInstaller@0
+  displayName: 'Install Terraform latest'
+
+- script: 'terraform init -backend-config="access_key=$(satrfmstate-key1)"'
+  workingDirectory: terraform
+  displayName: 'Terraform init'
+
+- script: |
+   terraform validate
+   
+  workingDirectory: terraform
+  displayName: 'Terraform Validate'
+
+- script: |
+   terraform plan -input=false -var="spn-client-id=$(sp-client-id)" -var="spn-client-secret=$(sp-secret)" -var="spn-tenant-id=$(sp-tenant-id)" 
+   
+  workingDirectory: terraform
+  displayName: 'Terraform Plan'
