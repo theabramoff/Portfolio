@@ -7,7 +7,7 @@ My name is Andrew A.
 
 I'm a Cloud Solutions Architect with more then 10 years experience in IT industry. For the last 4 year I've been focused on different aspects of Microsoft Azure Cloud and DevOps methodology.
 You can read more about me via the [link](https://www.linkedin.com/in/andrey-abramov-279a16236/) and I'm always welcome for new connections.
-Below you can have a look at approx. projects I've made.
+Below you can have a look at some projects I've made.
 
 ### The repository includes the following:
 - DevOps Projects
