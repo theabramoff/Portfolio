@@ -18,4 +18,4 @@ Below you can have a look at approx. projects I've made.
 - PowerShell
 	- The catalog provides examples how to use Azure PowerShell and make changes imperatively.
 
-Each of the catalogs should have own README.md with detailed explanation within the folder.ff
+Each of the catalogs should have own README.md with detailed explanation within the folder.
