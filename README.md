@@ -17,5 +17,7 @@ Below you can have a look at some projects I've made.
 	- The catalog provides examples how to use Terraform with Azure Cloud and how to make it using *CI/CD* approach
 - PowerShell
 	- The catalog provides examples how to use Azure PowerShell and make changes imperatively.
+- Python
+	- The catalog provides examples how to use Azure Python SDK with infrastructure delivery and update.
 
 Each of the catalogs should have own README.md with detailed explanation within the folder.
