@@ -1,16 +1,16 @@
 1. Install python and pip (make sure they have same version)
 
 # Replace < ... > with env. name, e.g. python_azure_env
-2. Create environment: python -m venv < ... >
+2. Create and Run virtual environment: python -m venv < ... >
 
+# In "requirements.txt" necessery libraries have to be specified
 3. Run and install modules from the txt file: pip install -r requirements.txt
 
-# Replace < ... > with Azure Subscription ID
+# Replace < ... > with Azure Subscription ID, "AZURE_SUBSCRIPTION_ID" should be specified in the code
+# During Azure SDK clients Initializing
 4. Create env. variable - $Env:AZURE_SUBSCRIPTION_ID = "< ... >"
 
 5. Authenticate Azure Portal, e.g. Azure CLI (required to be installed) - Az login
 
 #Replace < ... > with script name 
 6. Run scripts - python < ... >.py
-
-
