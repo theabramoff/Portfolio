@@ -14,7 +14,7 @@ Below you can have a look at some projects I've made.
 	-  *momo-store* - The catalog provides a full DevOps project.
 	-  *sausage-store* - The catalog provides a full DevOps project and different options for roll-out.
 - IaC
-	- The catalog provides examples how to use Terraform with Azure Cloud and how to make it using *CI/CD* approach
+	- The catalog provides examples how to use Terraform with Azure Cloud and AWS and how to deliver infrastructure using *CI/CD* approach from Azure DevOps
 - PowerShell
 	- The catalog provides examples how to use Azure PowerShell and make changes imperatively.
 - Python
