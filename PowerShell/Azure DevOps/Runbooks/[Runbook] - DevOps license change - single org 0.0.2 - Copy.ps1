@@ -1,6 +1,7 @@
 ﻿#########################################
 # The script is Runbook for Azure Automation Account
-# The script allows to change idle Azure DevOps lincesed from Basic and Basic + Test Plan to Stakeholder for everyone within 1 organization who has not access it for 2 months
+# The script allows to change idle Azure DevOps lincesed from Basic and Basic + Test Plan to Stakeholder for everyone within 1 organization who has not access it for 3 months
+#
 # Required:
 # Azure KeyVault
 # Azure Automation account
@@ -30,10 +31,9 @@ $PAT = Get-AzKeyVaultSecret -VaultName $kv -Name $kvSecretName -AsPlainText
 $Output = [System.Collections.ArrayList]@()
 
 # Replace < ... > to DevOps organization name
-$organizationName = "< ... >"
+$orgName = "< ... >"
 
-# Authenticate to Azure DevOps
-
+# Setting up variable authentication to Azure DevOps
 $base64AuthInfo = [System.Convert]::ToBase64String([System.Text.Encoding]::ASCII.GetBytes(":$($PAT)"))
 $headers = @{
     Authorization = "Basic $base64AuthInfo"
@@ -42,7 +42,7 @@ $headers = @{
 $UserParameters = @{
     Method  = "GET"
     Headers = $Headers
-    Uri     = "https://vsaex.dev.azure.com/$organizationName/_apis/userentitlements?api-version=5.1-preview.2"
+    Uri     = "https://vsaex.dev.azure.com/$($orgName)/_apis/userentitlements?api-version=5.1-preview.2"
 }
 $Users = (Invoke-RestMethod @UserParameters).members
 
@@ -51,12 +51,12 @@ foreach ($user in $Users) {
 
     #$userDescriptor = $user.descriptor
 
-    $userUrl = "https://vsaex.dev.azure.com/$organizationName/_apis/userentitlements/$($User.id)?api-version=5.1-preview.2"
+    $userUrl = "https://vsaex.dev.azure.com/$($orgName)/_apis/userentitlements/$($User.id)?api-version=5.1-preview.2"
     $userResponse = Invoke-RestMethod -Uri $userUrl -Method Get -Headers $headers
                 
-    # Check if the user has a Basic license and hasn't used it in the last 2 months
+    # Check if the user has a Basic license and hasn't used it in the last 3 months
     $lastAccessTime = [DateTime]::Parse($userResponse.lastAccessedDate)
-    $twoMonthsAgo = [DateTime]::UtcNow.AddMonths(-2)
+    $twoMonthsAgo = [DateTime]::UtcNow.AddMonths(-3)
     if (($userResponse.accessLevel.licenseDisplayName -eq "Basic" -or $userResponse.accessLevel.licenseDisplayName -eq "Basic + Test Plans") -and ($twoMonthsAgo -ge $lastAccessTime)) {
 
         # Construct the patch document to update the license
@@ -69,13 +69,12 @@ foreach ($user in $Users) {
                 accountLicenseType = "Stakeholder"
             }
         }
-
         # Update the user's license to Stakeholder
         $rest = (Invoke-RestMethod -Uri $userUrl -Method PATCH -Headers $headers -ContentType "application/json-patch+json" -Body (ConvertTo-Json -InputObject $patchDoc)).isSuccess
 
         $User | ForEach-Object {
         $UserObject = [PSCustomObject]@{
-            Organization = $organizationName
+            Organization = $orgName
             UserName = $_.user.principalName
             License  = $_.accessLevel.licenseDisplayName
             Updated   = $rest
@@ -85,6 +84,5 @@ foreach ($user in $Users) {
         }
     }
 }
-
 #Return the output
 $Output

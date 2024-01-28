@@ -18,6 +18,14 @@ $snetAddress = "< ... >"
 # Replace < ... > with route table name, e.g. rt-***
 $rtName = "< ... >"
 
+$tags = @{
+    OwnedBy             =   "Abramov, Andrey";
+    OwnerBackupPerson   =   "N/A";
+    ITOwnerGroup        =   "N/A";
+    Description         =   "Landing Zone for Sub 01";
+    LifecycleEnd        =   "31DEC2026";
+}
+
 # Authenticate Azure portal
 Connect-AzAccount
 
@@ -25,7 +33,7 @@ Connect-AzAccount
 Select-AzSubscription "< ... >"
 
 # rg deployment
-New-AzResourceGroup -Name $rgName -Location $location
+New-AzResourceGroup -Name $rgName -Location $location -Tag $tags
 
 # rt deployment
 New-AzRouteTable -Name $rtName -ResourceGroupName $rgName -location $location -DisableBgpRoutePropagation

@@ -1,6 +1,6 @@
 ﻿#########################################
 # Az module required
-# The script enables Azure Hybrid Benefit for Windows Servers
+# The script enables Azure Hybrid Benefit for Windows Servers within all accessible subscription
 #########################################
 
 # Replace < ... > with a path, e.g. c:\temp\
