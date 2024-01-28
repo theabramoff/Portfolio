@@ -1,6 +1,6 @@
 #########################################
 # Az module required
-# The script enables Azure Hybrid Benefit for a single Windows Servers
+# The script enables Azure Hybrid Benefit for a particular, single Windows Servers
 #########################################
 
 # Replace < ... > with reaource group name
